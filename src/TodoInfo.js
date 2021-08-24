@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import Countdown from "react-countdown";
-import React, { useState, useRef } from "react";
+import React, { useState} from "react";
 
 const idInfo = [
   {
@@ -27,57 +27,66 @@ const idInfo = [
 ];
 
 function TodoInfo() {
-  const [isActive, setIsActive] = useState(false);
-  const clockRef = useRef();
-
-  function start() {
-    setIsActive(!isActive);
-    clockRef.current.start();
-  }
-
-  const handlePause = () => clockRef.current.pause();
+  const [checked, setChecked] = useState(false);
 
   const { id } = useParams();
+  const [v, setV] = useState("none");
+  const [h, setH] = useState({});
+  const renderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      return <div>dksjdkiasdknasndjsadbfjsdf</div>;
+    } else {
+      return (
+        <>
+          <span style={{ display: "block" }}>
+            {hours}:{minutes}:{seconds}
+          </span>
+          <button
+            onClick={() => {
+              setV("inline-block");
+              setH({ hours: hours, minutes: minutes, seconds: seconds });
+            }}
+          >
+            finish
+          </button>
+        </>
+      );
+    }
+  };
 
   return (
     <div>
       {idInfo.map((singleInfo) => {
         if (+id === singleInfo.id) {
           return (
-            <div
-              style={{
-                height: "310px",
-                width: "300px",
-                backgroundColor: "red",
-                textAlign: "center",
-                margin: "auto",
-                border: "5px solid black",
-              }}
-            >
-              <h1>Finished</h1>
+            <div>
+              <h1 style={{ color: "red", textAlign: "center" }}>
+                {singleInfo.name}
+              </h1>
+              <div
+                className="popUp"
+                style={{ display: v }}
+              >{`${h.hours}:${h.minutes}:${h.seconds}`}</div>
+              <h2 style={{ textAlign: "center" }}>{singleInfo.info}</h2>
 
-              <div>
-                <h1>{singleInfo.price}</h1>
-                <h1>{singleInfo.quality}</h1>
-                <h1>{singleInfo.difficultyLevel}</h1>
-                <button onClick={start}>Start</button>
-                <button onClick={handlePause}>Finish</button>
-                <Countdown
-                  date={Date.now() + singleInfo.timer}
-                  intervalDelay={3}
-                  zeroPadTime={2}
-                  autoStart={false}
-                  ref={clockRef}
-                />
-                ,
-              </div>
+              <button onClick={() => setChecked(true)}>Start</button>
+              {checked ? (
+                <div>
+                  <Countdown
+                    date={Date.now() + singleInfo.Time}
+                    renderer={renderer}
+                  ></Countdown>
+                </div>
+              ) : null}
             </div>
           );
+        } else {
+          return null;
         }
-        return null;
       })}
     </div>
   );
 }
+
 
 export default TodoInfo;
