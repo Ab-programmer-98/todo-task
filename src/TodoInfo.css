@@ -1,0 +1,19 @@
+.popUp {
+  display: inline-block;
+  width: 380px;
+  background-color: green;
+  height: 312px;
+  margin-left: 33%;
+  position: absolute;
+  text-align: center;
+}
+
+.time {
+  display: inline-block;
+  width: 380px;
+  background-color: red;
+  height: 312px;
+  margin-left: 33%;
+  position: absolute;
+  text-align: center;
+}

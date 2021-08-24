@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import Countdown from "react-countdown";
-import React, { useState} from "react";
+import React, { useState } from "react";
+import "./TodoInfo.css";
 
 const idInfo = [
   {
@@ -9,6 +10,7 @@ const idInfo = [
     quality: "high",
     difficultyLevel: "hard",
     timer: 3000,
+    info: "it's worth a shot and you need to bash away. Someone will prime your development pump",
   },
   {
     id: 2,
@@ -16,6 +18,7 @@ const idInfo = [
     quality: "medium",
     difficultyLevel: "medium",
     timer: 5000,
+    info: "it's worth a shot and you need to bash away. Someone will prime your development pump",
   },
   {
     id: 3,
@@ -23,6 +26,7 @@ const idInfo = [
     quality: "superior",
     difficultyLevel: "hard",
     timer: 10000,
+    info: "it's worth a shot and you need to bash away. Someone will prime your development pump",
   },
 ];
 
@@ -32,9 +36,11 @@ function TodoInfo() {
   const { id } = useParams();
   const [v, setV] = useState("none");
   const [h, setH] = useState({});
+  const [s, setS] = useState("none");
   const renderer = ({ hours, minutes, seconds, completed }) => {
-    if (completed) {
-      return <div>dksjdkiasdknasndjsadbfjsdf</div>;
+    if (completed && v === "none") {
+      setS("inline-block");
+      return null;
     } else {
       return (
         <>
@@ -42,12 +48,13 @@ function TodoInfo() {
             {hours}:{minutes}:{seconds}
           </span>
           <button
+            style={{ textAlign: "center" }}
             onClick={() => {
               setV("inline-block");
               setH({ hours: hours, minutes: minutes, seconds: seconds });
             }}
           >
-            finish
+            Finish
           </button>
         </>
       );
@@ -60,20 +67,19 @@ function TodoInfo() {
         if (+id === singleInfo.id) {
           return (
             <div>
-              <h1 style={{ color: "red", textAlign: "center" }}>
-                {singleInfo.name}
-              </h1>
-              <div
-                className="popUp"
-                style={{ display: v }}
-              >{`${h.hours}:${h.minutes}:${h.seconds}`}</div>
+              <div className="time" style={{ display: s }}>
+                Time is up
+              </div>
+              <div className="popUp" style={{ display: v }}>
+                Finished:{`${h.hours}:${h.minutes}:${h.seconds}`}
+              </div>
               <h2 style={{ textAlign: "center" }}>{singleInfo.info}</h2>
 
               <button onClick={() => setChecked(true)}>Start</button>
               {checked ? (
                 <div>
                   <Countdown
-                    date={Date.now() + singleInfo.Time}
+                    date={Date.now() + singleInfo.timer}
                     renderer={renderer}
                   ></Countdown>
                 </div>
@@ -87,6 +93,5 @@ function TodoInfo() {
     </div>
   );
 }
-
 
 export default TodoInfo;
